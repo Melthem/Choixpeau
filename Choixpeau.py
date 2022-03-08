@@ -6,6 +6,7 @@ This is a temporary script file.
 """
 
 table_persos = []
+
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
     lines = f.readlines()
     key_line = lines[0].strip()
@@ -42,10 +43,4 @@ for element in table_persos:
             nom['House'] = element['House']
 
 print(table_base)
-            
-            
-            
-            
-            
-            
             
