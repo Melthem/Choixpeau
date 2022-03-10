@@ -42,5 +42,68 @@ for element in table_persos:
         if element['Name'] == nom['Name']:
             nom['House'] = element['House']
 
-print(table_base)
-            
+student1 = {'Name': 'Student1', 'Courage': 9, 'Ambition': 2, \
+            'Intelligence': 8, 'Good': 9}
+student2 = {'Name': 'Student2', 'Courage': 6, 'Ambition': 7, \
+            'Intelligence': 9, 'Good': 7}
+student3 = {'Name': 'Student3', 'Courage': 3, 'Ambition': 8, \
+            'Intelligence': 6, 'Good': 3}
+student4 = {'Name': 'Student4', 'Courage': 2, 'Ambition': 3, \
+            'Intelligence': 7, 'Good': 8}
+student5 = {'Name': 'Student5', 'Courage': 3, 'Ambition': 4, \
+            'Intelligence': 8, 'Good': 8}
+
+
+def choixpeau(student: dict, persos: list, voisins: int):
+    for character in persos:
+        distance = sqrt((int(character['Courage']) - student['Courage']) ** 2 + \
+            (int(character['Intelligence']) - student['Intelligence']) ** 2 + \
+            (int(character['Ambition']) - student['Ambition']) ** 2 + \
+            (int(character['Good']) - student['Good']))
+        liste_distance.append(distance)
+        character['Distance'] = distance
+    liste_distance.sort()
+    
+    liste_maisons_voisins = []
+    for i in table_base:
+        if len(liste_maisons_voisins) < voisins:
+            if i['Distance'] in liste_distance[:voisins]:
+                liste_maisons_voisins.append(i['House'])
+    maison = Counter(liste_maisons_voisins)
+    
+    return(f"L'élève {student['Name']} est, en fonction de ses {voisins} "
+             "plus proches voisins, de la maison "
+             f"{maison.most_common(1)[0][0]} !")
+
+
+def choixpeau_manuel(student: dict, persos: list, voisins: int):
+    student['Name'] = str(input("Saisissez le nom de l'élève : "))
+    student['Courage'] = int(input("Saisissez le courage de l'élève : "))
+    student['Intelligence'] = int(input("Saisissez l'intelligence de l'élève : "))
+    student['Ambition'] = int(input("Saisissez l'ambition' de l'élève : "))
+
+    for character in persos:
+        distance = sqrt((int(character['Courage']) - student['Courage']) ** 2 + \
+            (int(character['Intelligence']) - student['Intelligence']) ** 2 + \
+            (int(character['Ambition']) - student['Ambition']) ** 2 + \
+            (int(character['Good']) - student['Good']))
+        liste_distance.append(distance)
+        character['Distance'] = distance
+    liste_distance.sort()
+    
+    liste_maisons_voisins = []
+    for i in table_base:
+        if len(liste_maisons_voisins) < voisins:
+            if i['Distance'] in liste_distance[:voisins]:
+                liste_maisons_voisins.append(i['House'])
+    maison = Counter(liste_maisons_voisins)
+    
+    return(f"L'élève {student['Name']} est, en fonction de ses {voisins} "
+             "plus proches voisins, de la maison "
+             f"{maison.most_common(1)[0][0]} !")
+
+
+
+
+
+

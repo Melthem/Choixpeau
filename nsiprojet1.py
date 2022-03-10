@@ -4,7 +4,7 @@ Created on Mon Mar  7 20:04:34 2022
 
 @author: leoba
 """
-from math import *
+from math import sqrt
 from collections import Counter
 
 SonGoku = {'Name': 'Son Goku', 'Courage': 10, 'Ambition': 2, 'Intelligence': 6, 'Good': 10}
@@ -64,9 +64,11 @@ def choixpeau(student: dict, persos: list, voisins: int):
             if i['Distance'] in liste_distance[:voisins]:
                 liste_maisons_voisins.append(i['House'])
     maison = Counter(liste_maisons_voisins)
-    final = str(maison.most_common(1)[0][0])        
+    final  = str(maison.most_common(1)[0][0])
     
-    return(f("L'élève {SonGoku['Name']} est, en fonction de ses voisins plus proches voisins, de la maison {final} !"))
+    return(f"L'élève {SonGoku['Name']} est, en fonction de ses {voisins} "
+             "plus proches voisins, de la maison "
+             f"{maison.most_common(1)[0][0]} !")
     
 
     
