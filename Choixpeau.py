@@ -5,6 +5,11 @@ Spyder Editor
 This is a temporary script file.
 """
 
+from math import sqrt
+from collections import Counter
+
+
+
 table_persos = []
 
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
@@ -21,6 +26,7 @@ with open("Characters.csv", mode='r', encoding='utf-8') as f:
     
 
 table_caracteristiques = []
+
 with open("Caracteristiques_des_persos.csv", mode='r', encoding='utf-8') as f:
     lines = f.readlines()
     key_line = lines[0].strip()
@@ -33,7 +39,6 @@ with open("Caracteristiques_des_persos.csv", mode='r', encoding='utf-8') as f:
             dico[keys[i]] = values[i]
         table_caracteristiques.append(dico)
     
-
 
 table_base = table_caracteristiques
 
@@ -53,8 +58,11 @@ student4 = {'Name': 'Student4', 'Courage': 2, 'Ambition': 3, \
 student5 = {'Name': 'Student5', 'Courage': 3, 'Ambition': 4, \
             'Intelligence': 8, 'Good': 8}
 
+    
 
 def choixpeau(student: dict, persos: list, voisins: int):
+    liste_distance = []
+    liste_voisins = []
     for character in persos:
         distance = sqrt((int(character['Courage']) - student['Courage']) ** 2 + \
             (int(character['Intelligence']) - student['Intelligence']) ** 2 + \
@@ -65,45 +73,50 @@ def choixpeau(student: dict, persos: list, voisins: int):
     liste_distance.sort()
     
     liste_maisons_voisins = []
-    for i in table_base:
+    for length in persos:
         if len(liste_maisons_voisins) < voisins:
-            if i['Distance'] in liste_distance[:voisins]:
-                liste_maisons_voisins.append(i['House'])
+            if length['Distance'] in liste_distance[:voisins]:
+                liste_maisons_voisins.append(length['House'])
+                liste_voisins.append(length['Name'])
+   
     maison = Counter(liste_maisons_voisins)
     
     return(f"L'élève {student['Name']} est, en fonction de ses {voisins} "
              "plus proches voisins, de la maison "
-             f"{maison.most_common(1)[0][0]} !")
+             f"{maison.most_common(1)[0][0]} ! Ses {voisins} plus proches "
+             f"voisins sont {liste_voisins[0]}, {liste_voisins[1]}, "
+             f"{liste_voisins[2]}, et {liste_voisins[4]} !")
+
 
 
 def choixpeau_manuel(student: dict, persos: list, voisins: int):
+    liste_distance_manuelle = []
+    liste_voisins = []
     student['Name'] = str(input("Saisissez le nom de l'élève : "))
     student['Courage'] = int(input("Saisissez le courage de l'élève : "))
     student['Intelligence'] = int(input("Saisissez l'intelligence de l'élève : "))
-    student['Ambition'] = int(input("Saisissez l'ambition' de l'élève : "))
+    student['Ambition'] = int(input("Saisissez l'ambition de l'élève : "))
+    student['Good'] = int(input("Saisissez la bonté de l'élève : "))
 
     for character in persos:
         distance = sqrt((int(character['Courage']) - student['Courage']) ** 2 + \
             (int(character['Intelligence']) - student['Intelligence']) ** 2 + \
             (int(character['Ambition']) - student['Ambition']) ** 2 + \
             (int(character['Good']) - student['Good']))
-        liste_distance.append(distance)
+        liste_distance_manuelle.append(distance)
         character['Distance'] = distance
-    liste_distance.sort()
+    liste_distance_manuelle.sort()
     
     liste_maisons_voisins = []
-    for i in table_base:
+    for length in persos:
         if len(liste_maisons_voisins) < voisins:
-            if i['Distance'] in liste_distance[:voisins]:
-                liste_maisons_voisins.append(i['House'])
+            if length['Distance'] in liste_distance_manuelle[:voisins]:
+                liste_maisons_voisins.append(length['House'])
+                liste_voisins.append(length['Name'])
     maison = Counter(liste_maisons_voisins)
     
     return(f"L'élève {student['Name']} est, en fonction de ses {voisins} "
              "plus proches voisins, de la maison "
-             f"{maison.most_common(1)[0][0]} !")
-
-
-
-
-
-
+             f"{maison.most_common(1)[0][0]} ! Ses {voisins} plus proches "
+             f"voisins sont {liste_voisins[0]}, {liste_voisins[1]}, "
+             f"{liste_voisins[2]},et {liste_voisins[4]} !")
