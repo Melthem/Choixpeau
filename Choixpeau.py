@@ -12,6 +12,7 @@ from collections import Counter
 
 table_persos = []
 
+#Importation des deux fichiers puis création des deux tables
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
     lines = f.readlines()
     key_line = lines[0].strip()
@@ -42,11 +43,13 @@ with open("Caracteristiques_des_persos.csv", mode='r', encoding='utf-8') as f:
 
 table_base = table_caracteristiques
 
+#Fusion des deux tables
 for element in table_persos:
     for nom in table_base:
         if element['Name'] == nom['Name']:
             nom['House'] = element['House']
 
+#Création des profils prédéfinis
 student1 = {'Name': 'Student1', 'Courage': 9, 'Ambition': 2, \
             'Intelligence': 8, 'Good': 9}
 student2 = {'Name': 'Student2', 'Courage': 6, 'Ambition': 7, \
@@ -61,6 +64,19 @@ student5 = {'Name': 'Student5', 'Courage': 3, 'Ambition': 4, \
     
 
 def choixpeau(student: dict, persos: list, voisins: int):
+    """
+    Paramètres
+    ----------
+    student : dictionnaire
+        Profil d'élève à analyser
+    persos : liste
+        Table de personnages servant à placer student
+    voisins : int
+        Nombre de profil à prendre en compte pour placer student
+    ---------- 
+    Renvoie une f-string contenant la maison de student selon ses plus proches
+    voisins, ainsi que les dit voisins.
+    """
     liste_distance = []
     liste_voisins = []
     for character in persos:
@@ -88,10 +104,24 @@ def choixpeau(student: dict, persos: list, voisins: int):
              f"{liste_voisins[2]}, et {liste_voisins[4]} !")
 
 
-
 def choixpeau_manuel(student: dict, persos: list, voisins: int):
+    """
+    Paramètres
+    ----------
+    student : dictionnaire
+        Profil d'élève à analyser, modifié ensuite
+    persos : liste
+        Table de personnages servant à placer student
+    voisins : int
+        Nombre de profil à prendre en compte pour placer student, modifié
+        ensuite
+    ---------- 
+    Renvoie une f-string contenant la maison de student selon ses plus proches
+    voisins, ainsi que les dit voisins.
+    """
     liste_distance_manuelle = []
     liste_voisins = []
+    voisins = int(input("Saisissez le nombre de voisins pris en compte : "))
     student['Name'] = str(input("Saisissez le nom de l'élève : "))
     student['Courage'] = int(input("Saisissez le courage de l'élève : "))
     student['Intelligence'] = int(input("Saisissez l'intelligence de l'élève : "))
@@ -119,4 +149,4 @@ def choixpeau_manuel(student: dict, persos: list, voisins: int):
              "plus proches voisins, de la maison "
              f"{maison.most_common(1)[0][0]} ! Ses {voisins} plus proches "
              f"voisins sont {liste_voisins[0]}, {liste_voisins[1]}, "
-             f"{liste_voisins[2]},et {liste_voisins[4]} !")
+             f"{liste_voisins[2]}, et {liste_voisins[4]} !")
