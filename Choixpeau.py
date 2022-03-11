@@ -103,7 +103,7 @@ def choixpeau(student: dict, persos: list):
     
     return(f"L'élève {student['Name']} est, en fonction de ses 5 plus proches "
            f"voisins, de la maison {maison.most_common(1)[0][0]} ! Ses "
-           f"5 plus proches ""voisins sont {liste_voisins[0]} de "
+           f"5 plus proches voisins sont {liste_voisins[0]} de "
            f"{liste_maisons_voisins[0]}, {liste_voisins[1]} de "
            f"{liste_maisons_voisins[1]}, {liste_voisins[2]} de "
            f"{liste_maisons_voisins[2]}, {liste_voisins[3]} de "
@@ -181,7 +181,7 @@ def choixpeau_manuel(persos: list):
     
     #Création des valeurs de student
     voisins = int(input("Saisissez le nombre de voisins pris en compte : "))
-    assert voisins > 0, "Le nombre de voisins ne peut pas être nul !"
+    assert voisins > 0, "Le nombre de voisins doit être supérieur à 0 !"
     
     student['Name'] = str(input("Saisissez le nom de l'élève : "))
     
@@ -223,3 +223,38 @@ def choixpeau_manuel(persos: list):
              "plus proches voisins, de la maison "
              f"{maison.most_common(1)[0][0]} ! Ses {voisins} plus proches "
              f"voisins sont {liste_voisins} !")
+
+
+#IHM
+print("Bonjour ! Choisissez quelque chose à faire :")
+print("1. Passer au choixpeau les profils prédéfinis")
+print("2. Passer au choixpeau les profils prédéfnis en choisissant le nombre de voisins")
+print("3. Passer au choixpeau un profil ayant des caractéristiques remplies manuellement")
+print(" ")
+
+choix = int(input("Choisissez un numéro d'option : "))
+assert 1 <= choix <= 3, "Veuillez saisir une option valide"
+
+if choix == 1:
+    print(" ")
+    print(choixpeau(student1, table_base))
+    print(" ")
+    print(choixpeau(student2, table_base))
+    print(" ")
+    print(choixpeau(student3, table_base))
+    print(" ")
+    print(choixpeau(student4, table_base))
+elif choix == 2:
+    print(" ")
+    choix_voisins = int(input("Saisissez le nombre de voisins : "))
+    assert 0 < choix_voisins, "Veuillez saisir un nombre supérieur à 0"
+    print(choixpeau_k(student1, table_base, choix_voisins))
+    print(" ")
+    print(choixpeau_k(student2, table_base, choix_voisins))
+    print(" ")
+    print(choixpeau_k(student3, table_base, choix_voisins))
+    print("")
+    print(choixpeau_k(student4, table_base, choix_voisins))
+elif choix == 3:
+    print(" ")
+    print(choixpeau_manuel(table_base))
