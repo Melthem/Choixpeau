@@ -11,6 +11,7 @@ from collections import Counter
 
 
 table_persos = []
+table_caracteristiques = []
 
 #Importation des deux fichiers puis création des deux tables
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
@@ -24,9 +25,6 @@ with open("Characters.csv", mode='r', encoding='utf-8') as f:
         for i in range(len(keys)):
             dico[keys[i]] = values[i]
         table_persos.append(dico)
-    
-
-table_caracteristiques = []
 
 with open("Caracteristiques_des_persos.csv", mode='r', encoding='utf-8') as f:
     lines = f.readlines()
@@ -40,7 +38,6 @@ with open("Caracteristiques_des_persos.csv", mode='r', encoding='utf-8') as f:
             dico[keys[i]] = values[i]
         table_caracteristiques.append(dico)
     
-
 table_base = table_caracteristiques
 
 #Fusion des deux tables
@@ -69,26 +66,35 @@ def choixpeau(student: dict, persos: list, voisins: int):
     ----------
     student : dictionnaire
         Profil d'élève à analyser
+        
     persos : liste
         Table de personnages servant à placer student
+        
     voisins : int
         Nombre de profil à prendre en compte pour placer student
     ---------- 
     Renvoie une f-string contenant la maison de student selon ses plus proches
     voisins, ainsi que les dit voisins.
     """
+    
     liste_distance = []
     liste_voisins = []
+    liste_maisons_voisins = []
+       
+    #Création d'une liste contenant la distance euclidienne de student avec
+    #chaque personnage de persos
     for character in persos:
         distance = sqrt((int(character['Courage']) - student['Courage']) ** 2 + \
             (int(character['Intelligence']) - student['Intelligence']) ** 2 + \
             (int(character['Ambition']) - student['Ambition']) ** 2 + \
-            (int(character['Good']) - student['Good']))
+            (int(character['Good']) - student['Good']) ** 2)
         liste_distance.append(distance)
         character['Distance'] = distance
     liste_distance.sort()
     
-    liste_maisons_voisins = []
+    
+    #Création d'une liste contenant les noms des voisins plus proches voisins
+    #de student
     for length in persos:
         if len(liste_maisons_voisins) < voisins:
             if length['Distance'] in liste_distance[:voisins]:
@@ -100,44 +106,60 @@ def choixpeau(student: dict, persos: list, voisins: int):
     return(f"L'élève {student['Name']} est, en fonction de ses {voisins} "
              "plus proches voisins, de la maison "
              f"{maison.most_common(1)[0][0]} ! Ses {voisins} plus proches "
-             f"voisins sont {liste_voisins[0]}, {liste_voisins[1]}, "
-             f"{liste_voisins[2]}, et {liste_voisins[4]} !")
+             f"voisins sont {liste_voisins} !")
 
 
-def choixpeau_manuel(student: dict, persos: list, voisins: int):
+
+def choixpeau_manuel(persos: list):
     """
     Paramètres
     ----------
-    student : dictionnaire
-        Profil d'élève à analyser, modifié ensuite
+        
     persos : liste
-        Table de personnages servant à placer student
-    voisins : int
-        Nombre de profil à prendre en compte pour placer student, modifié
-        ensuite
+        Table de personnages servant de base pour placer le profil à analyser
+
     ---------- 
-    Renvoie une f-string contenant la maison de student selon ses plus proches
-    voisins, ainsi que les dit voisins.
+    Renvoie une f-string contenant la maison du profil à analyser selon ses
+    plus proches voisins, ainsi que les dit voisins.
     """
+    
+    student = {}
     liste_distance_manuelle = []
     liste_voisins = []
+    liste_maisons_voisins = []
+    
+    #Création des valeurs de student
     voisins = int(input("Saisissez le nombre de voisins pris en compte : "))
+    assert voisins > 0, "Le nombre de voisins ne peut pas être nul !"
+    
     student['Name'] = str(input("Saisissez le nom de l'élève : "))
-    student['Courage'] = int(input("Saisissez le courage de l'élève : "))
-    student['Intelligence'] = int(input("Saisissez l'intelligence de l'élève : "))
-    student['Ambition'] = int(input("Saisissez l'ambition de l'élève : "))
-    student['Good'] = int(input("Saisissez la bonté de l'élève : "))
+    
+    student['Courage'] = int(input("Saisissez le courage de l'élève, de 1 à 10 : "))
+    assert 1 <= student['Courage'] <= 10, "Le nombre saisi n'est pas compris entre 1 et 10 !"
+    
+    student['Intelligence'] = int(input("Saisissez l'intelligence de l'élève, de 1 à 10 : "))
+    assert 1 <= student['Intelligence'] <= 10, "Le nombre saisi n'est pas compris entre 1 et 10 !"
+    
+    student['Ambition'] = int(input("Saisissez l'ambition de l'élève, de 1 à 10 : "))
+    assert 1 <= student['Ambition'] <= 10, "Le nombre saisi n'est pas compris entre 1 et 10 !"
+    
+    student['Good'] = int(input("Saisissez la bonté de l'élève, de 1 à 10 : "))
+    assert 1 <= student['Good'] <= 10, "Le nombre saisi n'est pas compris entre 1 et 10 !"
 
+    
+    #Création d'une liste contenant la distance euclidienne de student avec
+    #chaque personnage de persos
     for character in persos:
         distance = sqrt((int(character['Courage']) - student['Courage']) ** 2 + \
             (int(character['Intelligence']) - student['Intelligence']) ** 2 + \
             (int(character['Ambition']) - student['Ambition']) ** 2 + \
-            (int(character['Good']) - student['Good']))
+            (int(character['Good']) - student['Good']) ** 2)
         liste_distance_manuelle.append(distance)
         character['Distance'] = distance
     liste_distance_manuelle.sort()
     
-    liste_maisons_voisins = []
+    #Création d'une liste contenant les noms des voisins plus proches voisins
+    #de student
     for length in persos:
         if len(liste_maisons_voisins) < voisins:
             if length['Distance'] in liste_distance_manuelle[:voisins]:
@@ -148,5 +170,4 @@ def choixpeau_manuel(student: dict, persos: list, voisins: int):
     return(f"L'élève {student['Name']} est, en fonction de ses {voisins} "
              "plus proches voisins, de la maison "
              f"{maison.most_common(1)[0][0]} ! Ses {voisins} plus proches "
-             f"voisins sont {liste_voisins[0]}, {liste_voisins[1]}, "
-             f"{liste_voisins[2]}, et {liste_voisins[4]} !")
+             f"voisins sont {liste_voisins} !")
