@@ -25,27 +25,23 @@ background = pygame.transform.scale(background, (1200, 850))
 banner = pygame.image.load("banner.jpg")
 banner = pygame.transform.scale(banner, (1200, 800))
 
-#Ajouter les boutons
+# Ajouter les boutons
 bouton_play = pygame.image.load("button.png")
-bouton_play = pygame.transform.scale(bouton_play, (350, 150))
 bouton_play_rect = bouton_play.get_rect()
 
 
 bouton_quit = pygame.image.load("quit.png")
-bouton_quit = pygame.transform.scale(bouton_quit, (350, 150))
 bouton_quit_rect = bouton_quit.get_rect()
 
 
 bouton_perso = pygame.image.load("bouton_perso.png")
-bouton_perso = pygame.transform.scale(bouton_perso, (400, 120))
-bouton_perso_rect = bouton_perso.get_rect()
+bouton_perso_rect = bouton_perso.get_rect(center=(600, 150))
 
 bouton_manuel = pygame.image.load("perso_manuel.png")
-bouton_manuel = pygame.transform.scale(bouton_manuel, (400, 120))
 bouton_manuel_rect = bouton_manuel.get_rect()
 
 
-#Definir la police d'écriture
+# Definir la police d'écriture
 police = pygame.font.Font("harryfont.ttf", 70)
 
 
@@ -55,20 +51,15 @@ while running:
     if game.jeu_lancé:
         screen.blit(background, (0, -100))
         screen.blit(bouton_quit, (0, 0))
+        screen.blit(bouton_perso, (350, 100)) 
+        screen.blit(bouton_manuel, (350, 400))
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse = pygame.mouse.get_pos()
                 if bouton_quit_rect.collidepoint(mouse[0], mouse[1]):
                     game.jeu_lancé = False
-        screen.blit(bouton_perso, (400, 150)) 
-        screen.blit(bouton_manuel, (400, 500))
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse = pygame.mouse.get_pos()
-                if bouton_perso_rect.collidepoint(mouse[0], mouse[1]):
-                    print("A FINIR VENDREDI 11")
-
-
+                elif bouton_perso_rect.collidepoint(mouse[0], mouse[1]):
+                    print(bouton_perso_rect)
     else:
         screen.blit(banner, (0, -100))
         screen.blit(bouton_play, (0, 0))
