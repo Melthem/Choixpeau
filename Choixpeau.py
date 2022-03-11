@@ -60,7 +60,58 @@ student5 = {'Name': 'Student5', 'Courage': 3, 'Ambition': 4, \
 
     
 
-def choixpeau(student: dict, persos: list, voisins: int):
+def choixpeau(student: dict, persos: list):
+    """
+    Paramètres
+    ----------
+    student : dictionnaire
+        Profil d'élève à analyser
+        
+    persos : liste
+        Table de personnages servant à placer student
+        
+    ---------- 
+    Renvoie une f-string contenant la maison de student selon ses 5 plus proches
+    voisins, ainsi que les dit voisins et leurs maisons.
+    """
+    
+    liste_distance = []
+    liste_voisins = []
+    liste_maisons_voisins = []
+       
+    #Création d'une liste contenant la distance euclidienne de student avec
+    #chaque personnage de persos
+    for character in persos:
+        distance = sqrt((int(character['Courage']) - student['Courage']) ** 2 + \
+            (int(character['Intelligence']) - student['Intelligence']) ** 2 + \
+            (int(character['Ambition']) - student['Ambition']) ** 2 + \
+            (int(character['Good']) - student['Good']) ** 2)
+        liste_distance.append(distance)
+        character['Distance'] = distance
+    liste_distance.sort()
+    
+    
+    #Création d'une liste contenant les noms des voisins plus proches voisins
+    #de student
+    for length in persos:
+        if len(liste_maisons_voisins) < 5:
+            if length['Distance'] in liste_distance[:5]:
+                liste_maisons_voisins.append(length['House'])
+                liste_voisins.append(length['Name'])
+   
+    maison = Counter(liste_maisons_voisins)
+    
+    return(f"L'élève {student['Name']} est, en fonction de ses 5 plus proches "
+           f"voisins, de la maison {maison.most_common(1)[0][0]} ! Ses "
+           f"5 plus proches ""voisins sont {liste_voisins[0]} de "
+           f"{liste_maisons_voisins[0]}, {liste_voisins[1]} de "
+           f"{liste_maisons_voisins[1]}, {liste_voisins[2]} de "
+           f"{liste_maisons_voisins[2]}, {liste_voisins[3]} de "
+           f"{liste_maisons_voisins[3]} et {liste_voisins[4]} de "
+           f"{liste_maisons_voisins[4]} !")
+
+
+def choixpeau_k(student: dict, persos: list, voisins: int):
     """
     Paramètres
     ----------
@@ -165,6 +216,7 @@ def choixpeau_manuel(persos: list):
             if length['Distance'] in liste_distance_manuelle[:voisins]:
                 liste_maisons_voisins.append(length['House'])
                 liste_voisins.append(length['Name'])
+                        
     maison = Counter(liste_maisons_voisins)
     
     return(f"L'élève {student['Name']} est, en fonction de ses {voisins} "
